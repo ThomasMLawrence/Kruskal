@@ -75,10 +75,13 @@ class Graph:
             
 
     def buildPair(self):
+        #builds a list of pairs
+        #this list will be sorted.
         fin = open("routes.txt")
         line = fin.readline()
         pairs = []
         while(line):
+            #reads the pairs in from the file
             line = line[1:len(line) - 2]
             city1, city2, weight = line.split(',')
             city1 = city1.strip()
@@ -90,35 +93,36 @@ class Graph:
         return pairs
 
     def add(self, city1, city2, weight):
+        #adds a new vertex pair to a graph.
         newVertex = Vertex(city1)
         self.vertices[city1] = newVertex
         self.vertices[city1].addAdjacent(city2, weight)
 
     def Kruskal(self):
+        #make a new graph for our MST
         minSpan = Graph()
         total = 0
+        #make our disjoint sets
         sets = UnionFind()
         sets.build(self.vertices)
+        #build a list of pairs in the old graph
         pairs = self.buildPair()
+        #sort the vertex pairs
         pairs.sort(key = lambda x: float(x.weight), reverse = False)
+        #now that the vertex pairs are sorted, we can simply
+        #iterate through them least to greatest.
         for i in range(0, len(pairs)):
             root1 = sets.find(pairs[i].city1)
             root2 = sets.find(pairs[i].city2)
+            #find the roots of the two disjoint sets
             if(root1 != root2):
+                #if they are in different sets we can union them
                 minSpan.add(pairs[i].city1, pairs[i].city2, pairs[i].weight)
                 total += float(pairs[i].weight)
                 sets.union(pairs[i].city1, pairs[i].city2)
+        #print tree and distance
         minSpan.printVertices()
         print("The total distance is: {}".format(total))
-
-
-
-
-
-
-
-
-
 
 
 class UnionFind:
@@ -143,15 +147,7 @@ class UnionFind:
         if(self.trees[start] != None):
             return self.trees[start]
         else:
-            return start
-
-
-
-
-
-
-
-
+            return star
 
     def union(self, node1, node2):
         #get the 2 roots
@@ -183,7 +179,7 @@ class UnionFind:
 
 
 class vertexPair():
-
+    #holds a pair of vertices
     def __init__(self, city1, city2, weight):
         self.city1 = city1
         self.city2 = city2
