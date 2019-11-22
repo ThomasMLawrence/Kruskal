@@ -147,7 +147,7 @@ class UnionFind:
         if(self.trees[start] != None):
             return self.trees[start]
         else:
-            return star
+            return start
 
     def union(self, node1, node2):
         #get the 2 roots
